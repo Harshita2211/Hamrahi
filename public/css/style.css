@@ -2543,3 +2543,161 @@ small {
     font-size: 3rem;
   }
 }
+/* Specifically for the price box shown in your screenshot */
+.trip-price, 
+.badge-primary,
+[class*="price-box"] {
+    background: #0b5fff !important; /* Bright accessible blue */
+    color: #ffffff !important;      /* Pure white text */
+    padding: 0.8rem 1.2rem !important;
+    border-radius: 12px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800 !important;
+}
+
+.trip-price span, 
+.trip-price small {
+    color: rgba(255, 255, 255, 0.9) !important; /* Makes "PER SEAT" visible */
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+.trip-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 20px !important;
+    padding: 2rem !important;
+    max-width: 450px; /* Prevents it from stretching too wide */
+    margin: 1.5rem auto !important; /* Centers the card on the page */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.2s ease;
+}
+
+.trip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(11, 95, 255, 0.1) !important;
+}
+
+/* Vertical line connector between From and To */
+.route-connector-line {
+    width: 2px;
+    height: 40px;
+    background: #e2e8f0;
+    margin-left: 11px; /* Aligns with the icons */
+}
+/* FORCE VISIBILITY FOR ALL LABELS AND TEXT */
+.trip-info-card p, 
+.trip-info-card span, 
+.trip-info-card label,
+.detail-label, 
+.route-label {
+    color: #475569 !important; /* Deep gray for light cards */
+    opacity: 1 !important;
+}
+
+/* Specific fix for the "Invisible" Price in the blue box */
+.price-box, .trip-price-highlight {
+    background: #2563eb !important; /* Solid vibrant blue */
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.price-box .amount, 
+.price-box .currency {
+    color: #ffffff !important; /* Pure white for the actual price */
+    font-weight: 800 !important;
+    font-size: 1.5rem;
+}
+/* Card Icon Labels (Date, Time, Seats) */
+.info-item-label {
+    color: #64748b !important; /* Slate gray */
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.info-item-value {
+    color: #0f172a !important; /* Near black for maximum contrast */
+    font-weight: 700 !important;
+}
+.driver-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.driver-card-header {
+    background: #facc15 !important; /* The yellow from your screenshot */
+    color: #000000 !important;
+    font-weight: 700;
+    padding: 10px 15px;
+}
+
+.driver-name {
+    color: #1e293b !important;
+    font-size: 1.1rem;
+}
+
+.driver-stats .stat-label {
+    color: #94a3b8 !important;
+}
+
+.driver-stats .stat-value {
+    color: #2563eb !important; /* Blue for the numbers like '152 TRIPS' */
+}
+/* --- TRIP DETAILS PAGE VISIBILITY FIXES --- */
+
+/* 1. Fix the "Departure Date" and "Time" Labels */
+.trip-info-card .detail-label, 
+.trip-info-card .info-label,
+.trip-info-card .route-label {
+    color: #64748b !important; /* Medium slate - clearly visible */
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* 2. Fix the Actual Data (The Date/Time strings) */
+.trip-info-card .detail-value,
+.trip-info-card .info-value,
+.trip-info-card .route-text {
+    color: #0f172a !important; /* Deep Navy/Black for max contrast */
+    font-weight: 700 !important;
+    font-size: 1rem;
+}
+
+/* 3. Price Visibility Fix */
+.price-value-large {
+    color: #059669 !important; /* Bright Success Green */
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.price-label-small {
+    color: #94a3b8 !important; /* Muted gray for "Price per seat" */
+    font-size: 0.8rem;
+}
+
+/* 4. Fix for the Blue/Teal Icon background contrast */
+.info-icon-wrapper {
+    background-color: #3b82f6 !important; /* Ensure icons aren't washed out */
+    color: white !important;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+/* 5. Driver Sidebar Text Visibility */
+.driver-info-content h5 {
+    color: #1e293b !important; /* Driver Name */
+}
+
+.driver-info-content .text-muted {
+    color: #64748b !important; /* "4.8 (127 reviews)" text */
+}

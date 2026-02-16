@@ -124,35 +124,50 @@ async function cleanupOldAvatar(currentAvatarUrl, userId) {
 }
 
 // Profile page - Auth required
+// Profile page - Auth required
 router.get('/', requireAuth, async (req, res) => {
   try {
-    const { data: profile, error } = await supabase
+    // 1. Try to fetch the profile
+    let { data: profile, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', req.user.id)
       .single();
 
-    if (error) {
-      console.error('Error fetching profile:', error);
-      return res.render('profile/index', {
-        user: req.user,
-        profile: null,
-        error: 'Failed to load profile',
-      });
+    // 2. If no profile exists (PGRST116 is Supabase's "no rows found" error)
+    // Create one automatically so the user doesn't see an error page
+    if (error && error.code === 'PGRST116') {
+      console.log('No profile found, creating a new one for user:', req.user.id);
+      
+      const { data: newProfile, error: createError } = await supabase
+        .from('profiles')
+        .insert([{ 
+            id: req.user.id, 
+            full_name: req.user.email.split('@')[0], // Use email prefix as a default name
+            avatar_url: null 
+        }])
+        .select()
+        .single();
+
+      if (createError) throw createError;
+      profile = newProfile;
+      error = null;
     }
 
+    // 3. Render the page with the found (or newly created) profile
     res.render('profile/index', {
       user: req.user,
       profile: profile || {},
-      error: null,
+      error: error ? 'Failed to load profile' : null,
       message: null,
     });
+
   } catch (error) {
     console.error('Profile error:', error);
     res.render('profile/index', {
       user: req.user,
       profile: null,
-      error: 'An error occurred',
+      error: 'An unexpected error occurred while loading your profile.',
     });
   }
 });
