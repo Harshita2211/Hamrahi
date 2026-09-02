@@ -1,4 +1,4 @@
-# CarPool Connect 🚗
+# Hamrahi (Carpooling web app) 🚗
 
 A modern, feature-rich carpooling application that connects drivers and passengers for shared rides, helping people save money, reduce their carbon footprint, and build community connections.
 
