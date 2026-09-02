@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Carpool Connect - Share rides, save money, help the environment">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="author" content="Carpool Connect">
+  <meta name="keywords" content="carpool, rideshare, travel, transportation, environment">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Carpool Connect - Share Rides, Save Money">
+  <meta property="og:description" content="Join Carpool Connect to share rides, save money, and help the environment. Find carpool partners for your daily commute or long-distance trips.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/images/og-image.jpg">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Carpool Connect - Share Rides, Save Money">
+  <meta name="twitter:description" content="Join Carpool Connect to share rides, save money, and help the environment.">
+  <meta name="twitter:image" content="/images/twitter-image.jpg">
+  
+  <title><%= typeof title !== 'undefined' ? title + ' - Carpool Connect' : 'Carpool Connect' %></title>
+  
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  
+  <!-- Leaflet CSS for Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="/css/style.css?v=<%= Date.now() %>">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-weight='bold'>🚗</text></svg">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+</head>
+
+<body class="app-body">
+  <!-- Skip to main content link for screen readers -->
+  <a href="#main-content" class="skip-link visually-hidden-focusable">Skip to main content</a>
+
+  <!-- Include Header Partial -->
+  <%- include('partials/header') %>
+
+  <!-- Main Content Area -->
+  <main class="main-content" id="main-content" role="main" aria-label="Main content">
+    <!-- Flash Messages -->
+    <% if (typeof query !== 'undefined' && query) { %>
+      <div class="flash-messages">
+        <% if (query.success === 'booked') { %>
+          <div class="alert alert-success alert-dismissible fade show" role="alert" data-announce="Trip booked successfully">
+            <div class="alert-content">
+              <i class="fas fa-check-circle me-2" aria-hidden="true"></i>
+              <div class="alert-text">
+                <strong>Success!</strong> Your seat has been booked for this trip.
+              </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% } else if (query.success === 'cancelled') { %>
+          <div class="alert alert-info alert-dismissible fade show" role="alert" data-announce="Booking cancelled">
+            <div class="alert-content">
+              <i class="fas fa-info-circle me-2" aria-hidden="true"></i>
+              <div class="alert-text">
+                <strong>Booking Cancelled</strong> Your booking has been cancelled successfully.
+              </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% } else if (query.error) { %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert" data-announce="Error occurred">
+            <div class="alert-content">
+              <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i>
+              <div class="alert-text">
+                <strong>Error:</strong> 
+                <% if (query.error === 'not_found') { %>
+                  Trip not found.
+                <% } else if (query.error === 'own_trip') { %>
+                  You cannot book a seat on your own trip.
+                <% } else if (query.error === 'no_seats') { %>
+                  No available seats on this trip.
+                <% } else if (query.error === 'already_booked') { %>
+                  You have already booked a seat on this trip.
+                <% } else if (query.error === 'booking_failed') { %>
+                  Failed to book seat. Please try again.
+                <% } else if (query.error === 'cancel_failed') { %>
+                  Failed to cancel booking. Please try again.
+                <% } else { %>
+                  <%= query.error %>
+                <% } %>
+              </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <%- body %>
+    </div>
+  </main>
+
+  <!-- Include Footer Partial -->
+  <%- include('partials/footer') %>
+
+  <!-- JavaScript Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Custom Application Scripts -->
+  <script src="/js/app.js"></script>
+  
+  <!-- Page-specific Scripts -->
+  <% if (typeof currentPage !== 'undefined' && currentPage === 'register') { %>
+    <script src="/js/register.js"></script>
+  <% } %>
+</body>
+</html>

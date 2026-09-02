@@ -1,0 +1,116 @@
+<!-- Footer -->
+<footer class="site-footer bg-dark text-white py-5" role="contentinfo" aria-label="Site footer">
+  <div class="container">
+    <!-- Main Footer Content - One Row with Three Columns -->
+    <div class="row g-4">
+      <!-- About Section -->
+      <div class="col-12 col-md-4">
+        <div class="footer-brand text-center text-md-start">
+          <div class="footer-logo d-flex align-items-center justify-content-center justify-content-md-start mb-4">
+            <i class="fas fa-car me-3 text-primary" aria-hidden="true" style="font-size: 2rem;"></i>
+            <span class="h3 mb-0 text-white fw-bold">Carpool Connect</span>
+          </div>
+          <p class="footer-description text-white-50 mb-4">
+            Share rides, save money, and help the environment. Join our community of eco-conscious travelers.
+          </p>
+          <div class="social-links d-flex justify-content-center justify-content-md-start gap-2">
+            <a href="#" class="social-link btn btn-outline-light btn-sm rounded-circle" aria-label="Facebook" style="width: 40px; height: 40px; padding: 0;">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-link btn btn-outline-light btn-sm rounded-circle" aria-label="Twitter" style="width: 40px; height: 40px; padding: 0;">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-link btn btn-outline-light btn-sm rounded-circle" aria-label="Instagram" style="width: 40px; height: 40px; padding: 0;">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-link btn btn-outline-light btn-sm rounded-circle" aria-label="LinkedIn" style="width: 40px; height: 40px; padding: 0;">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-12 col-md-4">
+        <h5 class="footer-heading h5 text-uppercase text-primary mb-4 text-center text-md-start">Quick Links</h5>
+        <ul class="footer-links list-unstyled text-center text-md-start">
+          <li class="mb-3">
+            <a href="/" class="footer-link text-decoration-none text-white d-flex align-items-center justify-content-center justify-content-md-start">
+              <i class="fas fa-home me-2 text-primary" aria-hidden="true"></i>
+              <span>Home</span>
+            </a>
+          </li>
+          <li class="mb-3">
+            <a href="/trips" class="footer-link text-decoration-none text-white d-flex align-items-center justify-content-center justify-content-md-start">
+              <i class="fas fa-search me-2 text-primary" aria-hidden="true"></i>
+              <span>Find Trips</span>
+            </a>
+          </li>
+          <% if (user) { %>
+            <li class="mb-3">
+              <a href="/profile" class="footer-link text-decoration-none text-white d-flex align-items-center justify-content-center justify-content-md-start">
+                <i class="fas fa-user me-2 text-primary" aria-hidden="true"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li class="mb-3">
+              <a href="/trips/create" class="footer-link text-decoration-none text-white d-flex align-items-center justify-content-center justify-content-md-start">
+                <i class="fas fa-plus me-2 text-primary" aria-hidden="true"></i>
+                <span>Create Trip</span>
+              </a>
+            </li>
+          <% } else { %>
+            <li class="mb-3">
+              <a href="/auth/register" class="footer-link text-decoration-none text-white d-flex align-items-center justify-content-center justify-content-md-start">
+                <i class="fas fa-user-plus me-2 text-primary" aria-hidden="true"></i>
+                <span>Register</span>
+              </a>
+            </li>
+            <li class="mb-3">
+              <a href="/auth/login" class="footer-link text-decoration-none text-white d-flex align-items-center justify-content-center justify-content-md-start">
+                <i class="fas fa-sign-in-alt me-2 text-primary" aria-hidden="true"></i>
+                <span>Login</span>
+              </a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="col-12 col-md-4">
+        <h5 class="footer-heading h5 text-uppercase text-primary mb-4 text-center text-md-start">Contact</h5>
+        <div class="footer-contact text-center text-md-start">
+          <div class="contact-item mb-3">
+            <i class="fas fa-envelope me-2 text-primary" aria-hidden="true"></i>
+            <a href="mailto:support@carpoolconnect.com" class="footer-link text-decoration-none text-white">
+              support@carpoolconnect.com
+            </a>
+          </div>
+          <div class="contact-item mb-3">
+            <i class="fas fa-phone me-2 text-primary" aria-hidden="true"></i>
+            <span class="text-white">1-800-CARPOOL</span>
+          </div>
+          <div class="contact-item mb-3">
+            <i class="fas fa-map-marker-alt me-2 text-primary" aria-hidden="true"></i>
+            <span class="text-white">Available Nationwide</span>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>
+   <!-- Copyright Section - Bottom Row -->
+  <div class=" mt-5 pt-4 border-top border-secondary">
+      <div class="row">
+        <div class="col-12">
+            <div class="footer-legal-links d-flex justify-content-center gap-3 mt-3">
+              <p class="copyright mb-0 text-white-50 small">
+              © <%= new Date().getFullYear() %> Carpool Connect. All rights reserved.
+            </p>
+              <a href="/privacy" class="footer-link text-decoration-none text-white-50 small">Privacy Policy</a>
+              <a href="/terms" class="footer-link text-decoration-none text-white-50 small">Terms of Service</a>
+              <a href="/sitemap" class="footer-link text-decoration-none text-white-50 small">Sitemap</a>
+            </div>
+        </div>
+      </div>
+    </div>
+</footer>

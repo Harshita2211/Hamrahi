@@ -224,50 +224,18 @@ const createTripData = async (req, routeData) => {
 };
 
 /**
- * Handle database insertion with proper error handling
+ * Handle database insertion using service role key (bypasses RLS)
  */
 const insertTrip = async (tripData) => {
   try {
-    console.log('🔍 Starting database insertion...');
-    console.log('📋 Trip data to insert:', {
-      has_origin_text: !!tripData.origin_text,
-      has_destination_text: !!tripData.destination_text,
-      has_departure_timestamp: !!tripData.departure_timestamp,
-      has_available_seats: !!tripData.available_seats,
-      has_driver_id: !!tripData.driver_id,
-      has_route_geojson: !!tripData.route_geojson,
-    });
-
-    // Try service role key first (bypasses RLS)
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      console.log('🔑 Using service role key for insertion');
-      const serviceRoleSupabase = createClient(
-        process.env.SUPABASE_URL,
-        process.env.SUPABASE_SERVICE_ROLE_KEY
-      );
-
-      const result = await serviceRoleSupabase.from('trips').insert([tripData]).select().single();
-
-      console.log('✅ Service role insertion successful');
-      return result;
-    }
-
-    // Fallback to anon key (may fail due to RLS)
-    console.log('⚠️ Using anon key (may fail due to RLS policies)');
-    const directSupabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-
-    const result = await directSupabase.from('trips').insert([tripData]).select().single();
-
-    console.log('✅ Anon key insertion successful');
+    const adminSupabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+    const result = await adminSupabase.from('trips').insert([tripData]).select().single();
     return result;
   } catch (error) {
-    console.error('❌ Database insertion error:', error);
-    console.error('📋 Error details:', {
-      message: error.message,
-      code: error.code,
-      details: error.details,
-      hint: error.hint,
-    });
+    console.error('Trip insertion error:', error.message);
     return { error: { message: error.message, code: error.code || 'DB_ERROR' } };
   }
 };
@@ -1040,7 +1008,7 @@ router.post(
       // 2. Verify seat availability first
       const { data: trip, error: tripError } = await serviceRoleSupabase
         .from('trips')
-        .select('available_seats, origin_text, destination_text, departure_timestamp, driver_id')
+        .select('available_seats, origin_text, destination_text, departure_timestamp, driver_id, price')
         .eq('id', tripId)
         .single();
 
@@ -1077,7 +1045,7 @@ router.post(
       res.render('trips/booking', {
         bookingId: booking.id,
         trip: trip,
-        driver: { full_name: 'Driver' }, // You can join profiles here for full details
+        driver: await fetchDriverProfile(trip.driver_id),
         user: req.user
       });
 
@@ -1139,7 +1107,8 @@ router.get(
 async function fetchFeaturedTrips(now) {
   const { data, error } = await supabase
     .from('trips')
-    .select(`
+    .select(
+      `
       id,
       origin_text,
       destination_text,
@@ -1150,30 +1119,15 @@ async function fetchFeaturedTrips(now) {
       driver_id,
       created_at,
       profiles:driver_id (id, full_name, avatar_url, phone)
-    `)
-    .gt('available_seats', 0)
+    `
+    )
+    .gt('available_seats', 0) // Only get trips with available seats
     .order('departure_timestamp', { ascending: true })
     .limit(TRIPS_LIMIT);
 
-  if (!error && data && data.length > 0) {
-    console.log(`✅ Fetched ${data.length} featured trips`);
-    return data;
-  }
-
-  if (error) console.warn('⚠️ Profile join failed:', error.message);
-
-  // Fallback without profile join
-  const { data: plain, error: plainErr } = await supabase
-    .from('trips')
-    .select('id, origin_text, destination_text, departure_timestamp, available_seats, price, description, driver_id, created_at')
-    .gt('available_seats', 0)
-    .order('departure_timestamp', { ascending: true })
-    .limit(TRIPS_LIMIT);
-
-  if (plainErr) { console.error('❌ Trip fetch error:', plainErr.message); return []; }
-
-  console.log(`✅ Fetched ${plain?.length || 0} featured trips (fallback)`);
-  return plain || [];
+  if (error) throw error;
+  console.log(`✅ Fetched ${data.length} featured trips with available seats`);
+  return data || [];
 }
 
 /**

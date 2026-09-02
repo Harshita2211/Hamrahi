@@ -1,0 +1,12 @@
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#f0f0f0"/>
+  <circle cx="150" cy="120" r="50" fill="#0b5fff"/>
+  <circle cx="150" cy="120" r="40" fill="#ffffff"/>
+  <circle cx="150" cy="120" r="30" fill="#0b5fff"/>
+  <path d="M150 100 L150 140" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="135" cy="110" r="3" fill="#ffffff"/>
+  <circle cx="165" cy="110" r="3" fill="#ffffff"/>
+  <path d="M140 125 Q150 135 160 125" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <text x="150" y="200" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#333333">USER</text>
+  <text x="150" y="220" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666666">Profile Avatar</text>
+</svg>

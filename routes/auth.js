@@ -46,6 +46,8 @@ router.use((err, req, res, next) => {
 
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
 
+const getSiteUrl = () => (process.env.SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
+
 // ============================================================================
 // FILE UPLOAD CONFIGURATION
 // ============================================================================
@@ -228,6 +230,46 @@ router.get('/forgot-password', (req, res) => {
     currentPage: 'forgot-password',
   });
 });
+
+/**
+ * GET /auth/callback
+ * Exchange the confirmation code for a session and sign the user in.
+ */
+router.get(
+  '/callback',
+  asyncHandler(async (req, res) => {
+    const { code, error, error_description } = req.query;
+
+    if (error) {
+      return res.render('auth/login', {
+        user: null,
+        error: error_description || error,
+        currentPage: 'login',
+      });
+    }
+
+    if (!code) {
+      return res.render('auth/login', {
+        user: null,
+        error: 'The email confirmation link is invalid or has expired.',
+        currentPage: 'login',
+      });
+    }
+
+    const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (exchangeError || !data.session) {
+      return res.render('auth/login', {
+        user: null,
+        error: exchangeError?.message || 'Unable to confirm your email address.',
+        currentPage: 'login',
+      });
+    }
+
+    setAuthCookie(res, data.session.access_token);
+    return res.redirect('/');
+  })
+);
 
 // ============================================================================
 // AUTHENTICATION ACTION ROUTES
@@ -531,7 +573,7 @@ router.post(
             bio: bio?.trim() || '',
             avatar_url: avatarUrl,
           },
-          emailRedirectTo: `${process.env.SITE_URL || 'http://localhost:3000'}/auth/callback`,
+          emailRedirectTo: `${getSiteUrl()}/auth/callback`,
         },
       });
 
@@ -640,7 +682,7 @@ router.post(
 
     // Send password reset email
     const { error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase().trim(), {
-      redirectTo: `${process.env.SITE_URL || 'http://localhost:3000'}/auth/reset-password`,
+      redirectTo: `${getSiteUrl()}/auth/reset-password`,
     });
 
     if (error) {

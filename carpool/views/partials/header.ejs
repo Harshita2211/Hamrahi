@@ -1,0 +1,89 @@
+<!-- Skip to main content link for screen readers -->
+<a href="#main-content" class="skip-link visually-hidden-focusable">Skip to main content</a>
+
+<!-- Navigation Header -->
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <!-- Brand -->
+      <a class="navbar-brand" href="/" aria-label="Carpool Connect - Home">
+        <i class="fas fa-car me-2" aria-hidden="true"></i>
+        <span>Carpool Connect</span>
+      </a>
+
+      <!-- Mobile toggle button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation menu -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Main navigation -->
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>" 
+               href="/" aria-current="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'page' : 'false' %>">
+              <i class="fas fa-home me-1" aria-hidden="true"></i>Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'trips' ? 'active' : '' %>" 
+               href="/trips" aria-current="<%= typeof currentPage !== 'undefined' && currentPage === 'trips' ? 'page' : 'false' %>">
+              <i class="fas fa-search me-1" aria-hidden="true"></i>Find Trips
+            </a>
+          </li>
+          <% if (user) { %>
+            <li class="nav-item">
+              <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'create-trip' ? 'active' : '' %>" 
+                 href="/trips/create" aria-current="<%= typeof currentPage !== 'undefined' && currentPage === 'create-trip' ? 'page' : 'false' %>">
+                <i class="fas fa-plus me-1" aria-hidden="true"></i>Create Trip
+              </a>
+            </li>
+          <% } %>
+        </ul>
+
+        <!-- User navigation -->
+        <ul class="navbar-nav">
+          <% if (user) { %>
+            <!-- Logged in user dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
+                 data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+                <i class="fas fa-user-circle me-1" aria-hidden="true"></i>
+                <%= user.email.split('@')[0] %>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" role="menu">
+                <li>
+                  <a class="dropdown-item" href="/profile" role="menuitem">
+                    <i class="fas fa-user me-2" aria-hidden="true"></i>My Profile
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider" role="separator"></li>
+                <li>
+                  <form action="/auth/logout" method="POST" class="d-inline">
+                    <button type="submit" class="dropdown-item text-danger" role="menuitem">
+                      <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i>Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          <% } else { %>
+            <!-- Guest user links -->
+            <li class="nav-item">
+              <a class="nav-link" href="/auth/login">
+                <i class="fas fa-sign-in-alt me-1" aria-hidden="true"></i>Login
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/auth/register">
+                <i class="fas fa-user-plus me-1" aria-hidden="true"></i>Register
+              </a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
