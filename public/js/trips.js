@@ -183,15 +183,14 @@ const updateRouteOnDataChange = () => {
   }
 };
 
-// Watch for route data changes
-const currentRouteData = document.getElementById('route_geojson').value;
+// Watch for route data changes — stop as soon as data is present
 routeDataWatcher = setInterval(() => {
   const newRouteData = document.getElementById('route_geojson').value;
   if (newRouteData && newRouteData !== '{}') {
-    console.log(' Route data updated, enabling submission');
-    updateRouteOnDataChange();
+    clearInterval(routeDataWatcher);
+    routeDataWatcher = null;
   }
-}, 500); // Check every 500ms
+}, 500);
 
 /**
  * Create suggestion containers
